@@ -1,14 +1,759 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-<title>Page Title</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IR Sensor Pro | ระบบตรวจจับสิ่งกีดขวางอัจฉริยะ</title>
+  <style>
+    :root {
+      --primary: #0d5bd8;
+      --primary-dark: #083f9e;
+      --primary-soft: #eaf3ff;
+      --secondary: #1b7cff;
+      --text: #14314d;
+      --muted: #5d6f84;
+      --light: #f5f9ff;
+      --white: #ffffff;
+      --border: rgba(13, 91, 216, 0.12);
+      --shadow: 0 20px 45px rgba(13, 91, 216, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #f4f9ff 0%, #edf5ff 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 80px;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--primary-dark);
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), #66a7ff);
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .brand-mark::before {
+      width: 18px;
+      height: 18px;
+      left: 12px;
+      top: 12px;
+      box-shadow: 0 0 0 5px rgba(255,255,255,0.18);
+    }
+
+    .brand-mark::after {
+      width: 7px;
+      height: 7px;
+      right: 9px;
+      bottom: 9px;
+      background: #d9edff;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.96rem;
+    }
+
+    .nav a:hover { color: var(--primary); }
+
+    .nav-cta {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(13, 91, 216, 0.28);
+    }
+
+    .hero {
+      padding: 72px 0 48px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 14px;
+      background: var(--primary-soft);
+      border: 1px solid rgba(13, 91, 216, 0.12);
+      border-radius: 999px;
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 18px;
+      font-size: clamp(2.5rem, 5vw, 4.4rem);
+      line-height: 1.08;
+      letter-spacing: -0.05em;
+      color: var(--primary-dark);
+    }
+
+    .hero p {
+      margin: 0 0 28px;
+      font-size: 1.06rem;
+      color: var(--muted);
+      max-width: 620px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 14px;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--white);
+      box-shadow: 0 18px 30px rgba(13, 91, 216, 0.25);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--primary-dark);
+      border: 1px solid var(--border);
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.96rem;
+      font-weight: 600;
+    }
+
+    .hero-meta span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2ed17b;
+      box-shadow: 0 0 0 5px rgba(46, 209, 123, 0.15);
+    }
+
+    .visual-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .device {
+      position: relative;
+      width: min(440px, 100%);
+      height: 420px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, #dfefff 0%, #b7d7ff 100%);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(13,91,216,0.12);
+      overflow: hidden;
+    }
+
+    .device::before {
+      content: "";
+      position: absolute;
+      inset: 18px 18px auto 18px;
+      height: 56px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.48);
+    }
+
+    .sensor-board {
+      position: absolute;
+      left: 50%;
+      top: 56%;
+      transform: translate(-50%, -50%);
+      width: 260px;
+      height: 220px;
+      border-radius: 28px;
+      background: linear-gradient(145deg, #eaf4ff 0%, #d2e5ff 100%);
+      border: 2px solid rgba(13,91,216,0.12);
+      box-shadow: inset 0 0 0 10px rgba(255,255,255,0.35);
+    }
+
+    .sensor-board::before,
+    .sensor-board::after {
+      content: "";
+      position: absolute;
+      background: linear-gradient(180deg, #fff, #dfeeff);
+      border-radius: 18px;
+      box-shadow: inset 0 0 0 2px rgba(13,91,216,0.08);
+    }
+
+    .sensor-board::before {
+      width: 82px;
+      height: 82px;
+      left: 27px;
+      top: 56px;
+    }
+
+    .sensor-board::after {
+      width: 82px;
+      height: 82px;
+      right: 27px;
+      top: 56px;
+    }
+
+    .sensor-lens {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle at 35% 35%, #dcecff, #7bb3ff 52%, #3b7ae8 80%);
+      border-radius: 50%;
+      box-shadow: 0 0 0 9px rgba(82, 146, 255, 0.12), 0 0 18px rgba(59, 122, 232, 0.25);
+      top: 78px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .sensor-tag {
+      position: absolute;
+      right: 28px;
+      bottom: 26px;
+      background: rgba(13, 91, 216, 0.96);
+      color: var(--white);
+      padding: 12px 16px;
+      border-radius: 16px;
+      box-shadow: 0 18px 30px rgba(13, 91, 216, 0.25);
+    }
+
+    .sensor-tag strong {
+      display: block;
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .stat-card {
+      position: absolute;
+      left: 20px;
+      top: 130px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(13,91,216,0.08);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: 0 16px 28px rgba(13,91,216,0.12);
+      min-width: 140px;
+    }
+
+    .stat-card small {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-card strong {
+      font-size: 1.35rem;
+      color: var(--primary-dark);
+    }
+
+    main { padding-bottom: 40px; }
+
+    section {
+      padding: 44px 0;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 10px 0 12px;
+      letter-spacing: -0.04em;
+      color: var(--primary-dark);
+    }
+
+    .section-head p {
+      margin: 0 auto;
+      max-width: 660px;
+      color: var(--muted);
+      font-size: 1.03rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 28px 24px;
+      box-shadow: 0 14px 28px rgba(13,91,216,0.06);
+    }
+
+    .icon-box {
+      width: 62px;
+      height: 62px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #dcedff, #edf5ff);
+      color: var(--primary);
+      font-size: 1.7rem;
+      margin-bottom: 18px;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.3rem;
+      color: var(--primary-dark);
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .showcase {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 30px;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(13,91,216,0.06), rgba(255,255,255,0.7));
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 28px;
+    }
+
+    .showcase-copy h3 {
+      margin: 0 0 12px;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      color: var(--primary-dark);
+      letter-spacing: -0.04em;
+    }
+
+    .showcase-copy p {
+      color: var(--muted);
+      margin: 0 0 22px;
+    }
+
+    .check-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .check-list li {
+      display: flex;
+      align-items: start;
+      gap: 10px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .check-list li::before {
+      content: "✓";
+      width: 26px;
+      height: 26px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #e4f9ee;
+      color: #1ea465;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .spec-panel {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 18px 32px rgba(13,91,216,0.08);
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #f3f9ff, #edf4ff);
+      border: 1px solid rgba(13,91,216,0.08);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.8rem;
+      color: var(--primary-dark);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .metric span {
+      font-size: 0.84rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    .cta-box {
+      margin-top: 36px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: var(--white);
+      border-radius: 30px;
+      padding: 36px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 26px 36px rgba(13, 91, 216, 0.22);
+    }
+
+    .cta-box h3 {
+      margin: 0 0 6px;
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      letter-spacing: -0.04em;
+    }
+
+    .cta-box p {
+      margin: 0;
+      color: rgba(255,255,255,0.8);
+    }
+
+    footer {
+      background: #0e1b2a;
+      color: rgba(255,255,255,0.8);
+      padding: 48px 0 26px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .footer-col h4 {
+      margin: 0 0 16px;
+      color: var(--white);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-col p, .footer-col a {
+      color: rgba(255,255,255,0.7);
+      margin: 0 0 8px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .showcase,
+      .footer-grid,
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .cta-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header-inner {
+        min-height: 70px;
+      }
+
+      .hero {
+        padding-top: 52px;
+      }
+
+      .spec-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
+  <header class="topbar">
+    <div class="container header-inner">
+      <a href="#" class="brand" aria-label="หน้าแรก IR Sensor Pro">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>IR Sensor Pro</span>
+      </a>
 
-<h1>Thanapat Choocherdrat</h1>
-<p>web2.0</p>
+      <nav class="nav" aria-label="เมนูหลัก">
+        <a href="#overview">ภาพรวม</a>
+        <a href="#features">คุณสมบัติเด่น</a>
+        <a href="#specs">ข้อมูลทางเทคนิค</a>
+        <a href="#contact">ติดต่อเรา</a>
+      </nav>
 
+      <button class="nav-cta">สั่งซื้อทันที</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="overview">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">โซลูชันระบบตรวจจับอัจฉริยะ</span>
+          <h1>ตรวจจับสิ่งกีดขวาง ได้แม่นยำและรวดเร็วยิ่งขึ้น</h1>
+          <p>
+            โมดูลเซ็นเซอร์ตรวจจับสิ่งกีดขวางด้วยอินฟราเรดได้รับการออกแบบเพื่อให้ระบบอัตโนมัติ
+            ตรวจจับวัตถุอย่างแม่นยำ รวดเร็ว และมีความน่าเชื่อถือสูง เหมาะสำหรับงานอุตสาหกรรม
+            ยานยนต์ และระบบ Automation ในยุคดิจิทัลที่ต้องการประสิทธิภาพสูงสุด
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#features">สำรวจฟีเจอร์</a>
+            <a class="btn btn-secondary" href="#specs">ดูสเปกสินค้า</a>
+          </div>
+
+          <div class="hero-meta">
+            <span><i class="dot" aria-hidden="true"></i> ความแม่นยำสูง</span>
+            <span><i class="dot" aria-hidden="true"></i> ตอบสนองไว</span>
+            <span><i class="dot" aria-hidden="true"></i> เชื่อมต่อง่าย</span>
+          </div>
+        </div>
+
+        <div class="visual-wrap" aria-label="ภาพประกอบเซ็นเซอร์">
+          <div class="device">
+            <div class="stat-card">
+              <small>ความเร็วในการตรวจจับ</small>
+              <strong>0.2 วินาที</strong>
+            </div>
+            <div class="sensor-board">
+              <div class="sensor-lens"></div>
+            </div>
+            <div class="sensor-tag">
+              <strong>IR-7</strong>
+              <span>เซ็นเซอร์ตรวจจับวัตถุ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">คุณสมบัติหลัก</span>
+          <h2>ออกแบบมาเพื่อประสิทธิภาพที่น่าเชื่อถือ</h2>
+          <p>
+            ช่วยลดข้อผิดพลาดในการตรวจจับสิ่งกีดขวางและเพิ่มประสิทธิภาพในการทำงานของระบบอัตโนมัติอย่างเต็มพิกัด
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <article class="feature-card">
+            <div class="icon-box">◎</div>
+            <h3>ความไวสูง (High Sensitivity)</h3>
+            <p>ตรวจจับวัตถุได้อย่างแม่นยำในระยะทางที่ต้องการ พร้อมความละเอียดและความเร็วสูง</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="icon-box">⚡</div>
+            <h3>การตอบสนองรวดเร็ว</h3>
+            <p>ตอบสนองต่อการเปลี่ยนแปลงภายในเวลาอันสั้น ช่วยให้ระบบทำงานแบบ Real-time</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="icon-box">🔧</div>
+            <h3>ติดตั้งและเชื่อมต่อง่าย</h3>
+            <p>ออกแบบให้เชื่อมต่อได้ง่ายกับไมโครคอนโทรลเลอร์และอุปกรณ์อัตโนมัติที่หลากหลาย</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="specs">
+      <div class="container">
+        <div class="showcase">
+          <div class="showcase-copy">
+            <span class="eyebrow">ทำไมต้องเลือกเรา</span>
+            <h3>ระบบตรวจจับอัจฉริยะสำหรับงานอุตสาหกรรมยุคใหม่</h3>
+            <p>
+              โมดูลนี้เหมาะสำหรับการใช้งานที่ต้องการความแม่นยำ ความปลอดภัย และประสิทธิภาพในการทำงาน
+              โดยเฉพาะในระบบอัตโนมัติ การเคลื่อนย้าย และกลไกที่จำเป็นต้องระวังสิ่งกีดขวาง
+            </p>
+
+            <ul class="check-list">
+              <li>ทนต่อสภาพแวดล้อมการทำงานที่หลากหลาย</li>
+              <li>ประหยัดพลังงานและใช้งานง่าย</li>
+              <li>รองรับการใช้งานในระบบอุตสาหกรรมและอุปกรณ์อัตโนมัติ</li>
+            </ul>
+          </div>
+
+          <div class="spec-panel" aria-label="ข้อมูลทางเทคนิคของผลิตภัณฑ์">
+            <div class="metric">
+              <strong>3.3V</strong>
+              <span>แรงดันไฟฟ้าทำงาน</span>
+            </div>
+            <div class="metric">
+              <strong>2–30 ซม.</strong>
+              <span>ระยะการตรวจจับ</span>
+            </div>
+            <div class="metric">
+              <strong>100Hz</strong>
+              <span>ความถี่สัญญาณ</span>
+            </div>
+            <div class="metric">
+              <strong>5 มม.</strong>
+              <span>ขนาดกะทัดรัด</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-box">
+          <div>
+            <h3>พร้อมยกระดับระบบอัจฉริยะของคุณแล้วหรือยัง?</h3>
+            <p>ผสานประสิทธิภาพของเซ็นเซอร์เข้ากับโซลูชันอัตโนมัติของคุณได้ง่ายๆ วันนี้</p>
+          </div>
+          <a class="btn btn-secondary" href="#contact">ขอใบเสนอราคา</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>IR Sensor Pro</h4>
+          <p>
+            โซลูชันเซ็นเซอร์ตรวจจับสิ่งกีดขวางที่ช่วยให้ระบบอัตโนมัติทำงานอย่างปลอดภัยและมีประสิทธิภาพ
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>ผลิตภัณฑ์</h4>
+          <a href="#overview">ภาพรวม</a><br />
+          <a href="#features">คุณสมบัติเด่น</a><br />
+          <a href="#specs">ข้อมูลทางเทคนิค</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>ช่วยเหลือ & สนับสนุน</h4>
+          <a href="#">เอกสารคู่มือ</a><br />
+          <a href="#">คำถามที่พบบ่อย (FAQ)</a><br />
+          <a href="#">ติดต่อเรา</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>ช่องทางติดต่อ</h4>
+          <p>info@irsensorpro.com</p>
+          <p>+66 98 765 4321</p>
+          <p>ประเทศไทย</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 IR Sensor Pro</span>
+        <span>ออกแบบเพื่อระบบอัตโนมัติอัจฉริยะ</span>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
-
-
